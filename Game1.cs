@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SimpleAnimationNamespace;
@@ -14,7 +15,13 @@ public class Game1 : Game
     private Texture2D _backGroundClouds;
 
     private SimpleAnimation _sonicAnimation;
-    private float sonicX = 250f;
+
+     private SimpleAnimation _coinAnimation;
+
+     private Vector2 sonicPosition;
+    
+
+     private Vector2 coinPosition;
 
     private Texture2D _marioHead;
 
@@ -60,7 +67,15 @@ public class Game1 : Game
         _sonicAnimation = new SimpleAnimation(
             Content.Load<Texture2D>("Sonic"),
             132,
-            145,
+            155,
+            4,
+            8
+        );
+
+        _coinAnimation = new SimpleAnimation(
+            Content.Load<Texture2D>("Coin"),
+            168,
+            148,
             4,
             8
         );
@@ -73,14 +88,37 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
+        sonicPosition.Y = 175f;
 
 
         _sonicAnimation.Update(gameTime);
-        sonicX += 5f;
+        _coinAnimation.Update(gameTime);
 
-        if(sonicX > 620f)
+        // Increases Sonics X position every update
+        sonicPosition.X += 10;
+
+        // Checks if Sonic is past the wall to teleport him back to the left 
+        if(sonicPosition.X > 620f)
         {
-            sonicX = -20f;
+            sonicPosition.X = -20f;
+        }
+        
+
+        if (Keyboard.GetState().IsKeyDown(Keys.W))
+        {
+            coinPosition.Y -= 4;
+        }
+        if (Keyboard.GetState().IsKeyDown(Keys.A))
+        {
+            coinPosition.X -= 4;
+        }
+        if (Keyboard.GetState().IsKeyDown(Keys.S))
+        {
+            coinPosition.Y += 4;
+        }
+        if (Keyboard.GetState().IsKeyDown(Keys.D))
+        {
+            coinPosition.X += 4;
         }
 
         base.Update(gameTime);
@@ -105,7 +143,10 @@ public class Game1 : Game
         _spriteBatch.DrawString(_comicSans,_output, new Vector2(15,10), Color.Black);
 
         // Draws an Animated Sprite of Sonic
-        _sonicAnimation.Draw(_spriteBatch, new Vector2(sonicX, 175), SpriteEffects.None);
+        _sonicAnimation.Draw(_spriteBatch, sonicPosition, SpriteEffects.None);
+
+        // Draws an Animated Sprite of a Coin for User Control
+        _coinAnimation.Draw(_spriteBatch, coinPosition, SpriteEffects.None);
 
         _spriteBatch.End();
 
