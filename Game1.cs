@@ -14,10 +14,17 @@ public class Game1 : Game
     private Texture2D _backGroundClouds;
 
     private SimpleAnimation _sonicAnimation;
+    private float sonicX = 250f;
 
     private Texture2D _marioHead;
 
     private SpriteFont _comicSans;
+
+    public float marioScale = 0.25f;
+
+    private float backGroundScale = 0.4f;
+
+   
 
     private string _output = "The quick brown fox jumped over the lazy dog";
 
@@ -69,6 +76,12 @@ public class Game1 : Game
 
 
         _sonicAnimation.Update(gameTime);
+        sonicX += 5f;
+
+        if(sonicX > 620f)
+        {
+            sonicX = -20f;
+        }
 
         base.Update(gameTime);
 
@@ -83,16 +96,16 @@ public class Game1 : Game
         // TODO: Add your drawing code here
 
         //Draws a Background
-        _spriteBatch.Draw(_backGroundClouds, Vector2.Zero, Color.White);
+        _spriteBatch.Draw(_backGroundClouds, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, backGroundScale, SpriteEffects.None, 0.1f);
 
         // Draws a Static Sprite of Mario
-        _spriteBatch.Draw(_marioHead, new Vector2(300, 140), Color.White);
+        _spriteBatch.Draw(_marioHead, new Vector2(520, 5), null, Color.White, 0f, Vector2.Zero, marioScale, SpriteEffects.None, 0.2f);
 
         // Draws test Font
-        _spriteBatch.DrawString(_comicSans,_output, new Vector2(20,200), Color.White);
+        _spriteBatch.DrawString(_comicSans,_output, new Vector2(15,10), Color.Black);
 
         // Draws an Animated Sprite of Sonic
-        _sonicAnimation.Draw(_spriteBatch, new Vector2(100, 200), SpriteEffects.None);
+        _sonicAnimation.Draw(_spriteBatch, new Vector2(sonicX, 175), SpriteEffects.None);
 
         _spriteBatch.End();
 
